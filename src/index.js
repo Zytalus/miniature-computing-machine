@@ -30,6 +30,13 @@ function calculateWinner(squares) {
     return null;
 }
 
+function calculatePosition(i){
+    const col = (i % 3) + 1;
+    const row = parseInt((i / 3) + 1);
+    const pos = [col, row];
+    return pos;
+}
+
 class Board extends React.Component {
     renderSquare(i) {
         return (
@@ -68,7 +75,8 @@ class Game extends React.Component {
         super(props);
         this.state = {
             history: [{
-                squares: Array(9).fill(null)
+                squares: Array(9).fill(null),
+                position: null
             }],
             xIsNext: true,
             stepNumber: 0,
@@ -86,7 +94,8 @@ class Game extends React.Component {
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             history: history.concat([{
-                squares: squares
+                squares: squares,
+                position: i
             }]),
             xIsNext: !this.state.xIsNext,
             stepNumber: history.length,
@@ -105,13 +114,16 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
-        const moves = history.map((step, move) => {
-            const desc = move ?
-                'Go to move #' + move :
-                'Go to game start';
+        const moves = history.map((step, move) => {            
+            const position = calculatePosition(history[move].position);
+            const description = move ? 
+                (move % 2 === 1) ? 
+                    'X at [' + position + ']' : 
+                    'O at [' + position + ']' :
+                    'Game Start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button onClick={() => this.jumpTo(move)}>{description}</button>
                 </li>
             );
         });
