@@ -4,7 +4,7 @@ import './index.css';
 
 function Square(props) {
     return (
-        <button className="square" onClick={props.onClick}>
+        <button className={props.squareClass} onClick={props.onClick}>
             {props.value}
         </button>
     );
@@ -23,8 +23,8 @@ function calculateWinner(squares) {
     ];
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
-        if (squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return lines[i];
         }
     }
     return null;
@@ -43,6 +43,7 @@ class Board extends React.Component {
             <Square
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
+                squareClass={this.props.squareClass(i)}
             />
         );
     }
@@ -70,7 +71,8 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
-                position: null
+                position: null,
+                winner: null
             }],
             xIsNext: true,
             sortIsAssending: true,
@@ -95,6 +97,17 @@ class Game extends React.Component {
             xIsNext: !this.state.xIsNext,
             stepNumber: history.length,
         });
+    }
+    isWinner(i,winner) {
+
+        let squareClass = 'square';
+        if (winner){
+            for(let j = 0; j < 3; j++){
+                if(winner[j] === i) squareClass = 'winning-square';
+            }
+        }
+
+        return squareClass;
     }
 
     handleToggle() {
@@ -140,7 +153,7 @@ class Game extends React.Component {
         let status;
 
         if (winner) {
-            status = 'Winner: ' + winner;
+            status = 'Winner: ' + history[this.state.stepNumber].squares[winner[0]];
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -153,6 +166,7 @@ class Game extends React.Component {
                     <Board
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
+                        squareClass={(i) => this.isWinner(i,winner)}
                     />
                 </div>
                 <div className="game-info">
