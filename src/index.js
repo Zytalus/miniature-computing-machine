@@ -121,6 +121,13 @@ class Game extends React.Component {
                     'X at [' + position + ']' : 
                     'O at [' + position + ']' :
                     'Game Start';
+            if (move === this.state.stepNumber) {
+                return (
+                    <li key={move}>
+                        <strong>{description}</strong>
+                    </li>
+                );
+            }
             return (
                 <li key={move}>
                     <button onClick={() => this.jumpTo(move)}>{description}</button>
