@@ -154,7 +154,11 @@ class Game extends React.Component {
 
         if (winner) {
             status = 'Winner: ' + history[this.state.stepNumber].squares[winner[0]];
-        } else {
+        } else if (this.state.stepNumber === current.squares.length) {
+            status = 'Draw: Nobody Wins!';
+
+        }
+        else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
         let sortStatus = this.state.sortIsAssending ? '\u2193' : '\u2191';
