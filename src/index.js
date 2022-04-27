@@ -144,7 +144,7 @@ class Game extends React.Component {
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
-        let sortStatus = this.state.sortIsAssending ? '\u2191' : '\u2193';
+        let sortStatus = this.state.sortIsAssending ? '\u2193' : '\u2191';
         moves = (this.state.sortIsAssending) ? moves : moves.reverse();
 
         return (
